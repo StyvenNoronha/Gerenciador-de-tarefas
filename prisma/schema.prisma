@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UsersRoles {
+  admin
+  member
+}
+
+enum TasksStatus {
+  pending
+  in_progress
+  completed
+}
+
+enum TasksPriority {
+  high
+  medium
+  low
+}
+
+model Users {
+  id        Int            @id @default(autoincrement())
+  name      String
+  email     String
+  password  String
+  role      UsersRoles     @default(admin)
+  members   Team_Members[]
+  tasks     Tasks[]        @relation("AssignedTasks")
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime?      @updatedAt @map("updated_at")
+
+  @@map("user")
+}
+
+model Teams {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String
+  members     Team_Members[]
+  tasks       Tasks[]        @relation("TeamTasks")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime?      @updatedAt @map("updated_at")
+
+  @@map("team")
+}
+
+model Team_Members {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  teamId    Int      @map("team_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      Users    @relation(fields: [userId], references: [id])
+  team      Teams    @relation(fields: [teamId], references: [id])
+
+  @@map("teamMembers")
+}
+
+model Tasks {
+  id          Int           @id @default(autoincrement())
+  title       String
+  description String
+  status      TasksStatus   @default(pending)
+  priority    TasksPriority @default(high)
+  assignedTo  Int           @map("assigned_to")
+  teamId      Int           @map("team_id")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime?     @updatedAt @map("updated_at")
+
+  assignedUser Users @relation("AssignedTasks", fields: [assignedTo], references: [id])
+  team         Teams @relation("TeamTasks", fields: [teamId], references: [id])
+
+  @@map("task")
+}
+
+
+//npx prisma studio
