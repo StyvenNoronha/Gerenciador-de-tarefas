@@ -12,7 +12,7 @@ class UsersController{
         const {name, email, password} = bodySchema.parse(request.body)
         const hashPassword = await hash(password, 8)
 
-        return response.json({message: "ok", hashPassword})
+        return response.json({message: "ok"})
     }
 }
 
