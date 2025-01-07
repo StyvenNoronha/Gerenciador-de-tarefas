@@ -30,8 +30,11 @@ export class TasksController{
 
     async index(request: Request, response:Response){
         const task = await prisma.tasks.findMany({
-
+            include:{
+                team:{select:{name:true, members:true}}
+            }
         })
+        
         return response.json(task)
     }
 }
