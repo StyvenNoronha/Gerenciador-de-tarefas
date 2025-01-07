@@ -7,8 +7,8 @@ import {authConfig} from "@/configs/auth"
 import {sign} from "jsonwebtoken"
 
 
-export class TeamsController{
+export class TasksController{
     async create(request: Request, response:Response){
-        return response.json({message:"ok"})
+        return response.json({message:"tarefas"})
     }
 }
