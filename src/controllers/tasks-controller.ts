@@ -34,4 +34,11 @@ export class TasksController{
         
         return response.json(task)
     }
+
+    async delete(request: Request, response:Response){
+        const {id} = request.params
+
+        await prisma.tasks.delete({where:{id:Number(id)}})
+        return response.json({message:"Tarefa deletada "})
+    }
 }

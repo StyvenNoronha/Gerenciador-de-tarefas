@@ -12,5 +12,5 @@ tasksRoutes.post("/", tasksController.create)
 tasksRoutes.get("/", tasksController.index)
 tasksRoutes.patch("/:id/status", statusPriorityController.update)
 tasksRoutes.patch("/:id/priority", statusPriorityController.updatePriority)
-
+tasksRoutes.delete("/:id/delete",tasksController.delete)
 export{tasksRoutes}
