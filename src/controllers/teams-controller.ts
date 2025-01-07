@@ -9,6 +9,18 @@ import {sign} from "jsonwebtoken"
 
 export class TeamsController{
     async create(request: Request, response:Response){
-        return response.json({message:"ok"})
+        const bodySchema = z.object({
+            name: z.string(),
+            description: z.string(),
+        })
+        const {name, description} = bodySchema.parse(request.body)
+
+        await prisma.teams.create({
+            data:{
+                name:name,
+                description:description
+            }
+        })
+        return response.status(201).json()
     }
 }
