@@ -27,4 +27,11 @@ export class TasksController{
         })
         return response.status(201).json()
     }
+
+    async index(request: Request, response:Response){
+        const task = await prisma.tasks.findMany({
+
+        })
+        return response.json(task)
+    }
 }
