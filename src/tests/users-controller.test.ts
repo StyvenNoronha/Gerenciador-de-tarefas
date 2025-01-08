@@ -1,8 +1,23 @@
+import request from "supertest"
+import {app} from "@/app"
+import {prisma} from "@/database/prisma"
+
 describe("UsersController", () => {
-    it("should pass this simple test", () => {
-      expect(true).toBe(true);
+    let user_id: string
+    afterAll(async()=>{
+        await prisma.users.delete({where:{id: Number(user_id)}})
+    })
+    it("should create a new user successfully", async() => {
+      const response = await request(app).post("/users").send({
+        name:"TestUser",
+        email:"testuser@example.com",
+        password:"123456"
+      })
+      expect(response.status).toBe(201)
+      expect(response.body).toHaveProperty("id")
+      expect(response.body.name).toBe("TestUser")
+
+      user_id = response.body.id
     });
-  
-    console.log("Passou por aqui");
   });
   
